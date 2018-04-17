@@ -14,10 +14,9 @@ import com.google.appengine.repackaged.com.google.api.client.json.jackson2.Jacks
 
 public class InitServlet extends HttpServlet {
 	  @Override
-	  public void doGet(HttpServletRequest req, HttpServletResponse resp)
-	      throws IOException {
+	  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	    //resp.setContentType("text/plain");
-	    resp.getWriter().println("Initializing...");
+	    //resp.getWriter().println("Initializing...");
 	    
 	    
 	    // clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(new FileInputStream(new File("WEB-INF/client_secrets.json"))));
