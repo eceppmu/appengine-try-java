@@ -36,23 +36,28 @@ public class InitServlet extends HttpServlet {
 	    	//InputStream productStream = new URL("https://storage.googleapis.com/ppmutestapp.appspot.com/products.json").openStream();
 
 	    	Gson gson = new GsonBuilder().create();
-		    
-		    //JsonReader jsonReader = new JsonReader(new InputStreamReader(productStream));
-	    	JsonReader jsonReader = new JsonReader(StorageUtils.readFile("ppmutestapp.appspot.com", "products.json"));
-	    	jsonReader.beginArray();
 	    	
-	    	Product product = null;
+	    	for( int i = 1; i <= 11; i++ ) {
+		    	InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/json/xaa"+i+".json");
 
-		    while(jsonReader.hasNext()) {		    	
-		    	product = gson.fromJson(jsonReader, Product.class);
+			    JsonReader jsonReader = new JsonReader(new InputStreamReader(productsStream));
 		    	
-		    	long key = productDao.createProduct(product);
-		   
-		    	System.out.println(key + " : " + product);
-		    }
-
-		    jsonReader.close();
-		    //productsStream.close();
+			    //JsonReader jsonReader = new JsonReader(StorageUtils.readFile("ppmutestapp.appspot.com", "products.json"));
+		    	jsonReader.beginArray();
+		    	
+		    	Product product = null;
+	
+			    while(jsonReader.hasNext()) {		    	
+			    	product = gson.fromJson(jsonReader, Product.class);
+			    	
+			    	long key = productDao.createProduct(product);
+			   
+			    	System.out.println(key + " : " + product);
+			    }
+	
+			    jsonReader.close();
+			    productsStream.close();
+	    	}
 	    } catch (Exception e) {
 	    	e.printStackTrace(new PrintStream(resp.getOutputStream()));
 	        //throw new RuntimeException("failed to load Instance json file " + resourcePath + ": " + e.getMessage(), e);
