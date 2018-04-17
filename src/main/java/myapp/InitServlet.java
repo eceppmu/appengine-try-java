@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.URL;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 
 import products.DatastoreProductDao;
 import products.Product;
@@ -31,12 +30,13 @@ public class InitServlet extends HttpServlet {
 	    
 	    try {
 	    	ProductDao productDao = new DatastoreProductDao();
-	    	
+	    		    	
+	    	//InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/products.json.zip");
+	    	InputStream productStream = new URL("https://storage.googleapis.com/ppmutestapp.appspot.com/products.json").openStream();
+
 	    	Gson gson = new GsonBuilder().create();
-	    	
-		    InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/products.json");
 		    
-		    JsonReader jsonReader = new JsonReader(new InputStreamReader(productsStream));
+		    JsonReader jsonReader = new JsonReader(new InputStreamReader(productStream));
 	    	jsonReader.beginArray();
 
 		    while(jsonReader.hasNext()) {
@@ -50,7 +50,7 @@ public class InitServlet extends HttpServlet {
 		    }
 
 		    jsonReader.close();
-		    productsStream.close();
+		    //productsStream.close();
 	    } catch (Exception e) {
 	    	e.printStackTrace(new PrintStream(resp.getOutputStream()));
 	        //throw new RuntimeException("failed to load Instance json file " + resourcePath + ": " + e.getMessage(), e);
