@@ -9,10 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+
+import products.DatastoreProductDao;
+import products.Product;
+import products.ProductDao;
 
 public class InitServlet extends HttpServlet {
 	  @Override
@@ -24,34 +30,25 @@ public class InitServlet extends HttpServlet {
 	    // clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(new FileInputStream(new File("WEB-INF/client_secrets.json"))));
 	    
 	    try {
+	    	ProductDao productDao = new DatastoreProductDao();
+	    	
+	    	Gson gson = new GsonBuilder().create();
+	    	
 		    InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/products.json");
 		    
 		    JsonReader jsonReader = new JsonReader(new InputStreamReader(productsStream));
-		    while(jsonReader.hasNext()){
-		        JsonToken nextToken = jsonReader.peek();
-		        System.out.println(nextToken);
+	    	jsonReader.beginArray();
 
-		        if(JsonToken.BEGIN_OBJECT.equals(nextToken)){
-
-		            jsonReader.beginObject();
-
-		        } else if(JsonToken.NAME.equals(nextToken)){
-
-		            String name  =  jsonReader.nextName();
-		            System.out.println(name);
-
-		        } else if(JsonToken.STRING.equals(nextToken)){
-
-		            String value =  jsonReader.nextString();
-		            System.out.println(value);
-
-		        } else if(JsonToken.NUMBER.equals(nextToken)){
-
-		            long value =  jsonReader.nextLong();
-		            System.out.println(value);
-
-		        }
+		    while(jsonReader.hasNext()) {
+		    //for(int i = 0; i < 10; i++ ) {
+		    	
+		    	Product product = gson.fromJson(jsonReader, Product.class);
+		    	
+		    	long key = productDao.createProduct(product);
+		   
+		    	System.out.println(key + " : " + product);
 		    }
+
 		    jsonReader.close();
 		    productsStream.close();
 	    } catch (Exception e) {
