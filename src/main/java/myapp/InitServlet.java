@@ -18,6 +18,7 @@ import com.google.gson.stream.JsonReader;
 import products.DatastoreProductDao;
 import products.Product;
 import products.ProductDao;
+import utils.StorageUtils;
 
 public class InitServlet extends HttpServlet {
 	  @Override
@@ -32,17 +33,18 @@ public class InitServlet extends HttpServlet {
 	    	ProductDao productDao = new DatastoreProductDao();
 	    		    	
 	    	//InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/products.json.zip");
-	    	InputStream productStream = new URL("https://storage.googleapis.com/ppmutestapp.appspot.com/products.json").openStream();
+	    	//InputStream productStream = new URL("https://storage.googleapis.com/ppmutestapp.appspot.com/products.json").openStream();
 
 	    	Gson gson = new GsonBuilder().create();
 		    
-		    JsonReader jsonReader = new JsonReader(new InputStreamReader(productStream));
+		    //JsonReader jsonReader = new JsonReader(new InputStreamReader(productStream));
+	    	JsonReader jsonReader = new JsonReader(StorageUtils.readFile("ppmutestapp.appspot.com", "products.json"));
 	    	jsonReader.beginArray();
+	    	
+	    	Product product = null;
 
-		    while(jsonReader.hasNext()) {
-		    //for(int i = 0; i < 10; i++ ) {
-		    	
-		    	Product product = gson.fromJson(jsonReader, Product.class);
+		    while(jsonReader.hasNext()) {		    	
+		    	product = gson.fromJson(jsonReader, Product.class);
 		    	
 		    	long key = productDao.createProduct(product);
 		   
