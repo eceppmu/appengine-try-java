@@ -25,14 +25,61 @@ public class InitServletSQL extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
+		// "INSERT INTO Product (sku, name, type, price, image, url) VALUES
+		// (?,?,?,?,?,?);";
+
 		try {
-			String number = req.getParameter("number");
-			
 			ProductDao productDao = new SQLProductDao();
 
 			Gson gson = new GsonBuilder().create();
 
-			InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/json/xaa" + number + ".json");
+			//for (int i = 1; i <= 11; i++) {
+
+				InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/json/products.json");
+
+				JsonReader jsonReader = new JsonReader(new InputStreamReader(productsStream));
+
+				jsonReader.beginArray();
+
+				Product product = null;
+
+				while (jsonReader.hasNext()) {
+					product = gson.fromJson(jsonReader, Product.class);
+
+					//long key = productDao.createProduct(product);
+
+					System.out.println("INSERT INTO Product (sku, name, type, price, image, url) VALUES ('"
+					+ product.getSku() + "','"
+					+ product.getName() + "','"
+					+ product.getType() + "','"
+					+ product.getPrice() + "','"
+					+ product.getImage() + "','"
+					+ product.getUrl() + "');");
+				}
+				jsonReader.close();
+				productsStream.close();
+			//}
+		} catch (Exception e) {
+			e.printStackTrace(new PrintStream(resp.getOutputStream()));
+			// throw new RuntimeException("failed to load Instance json file " +
+			// resourcePath + ": " + e.getMessage(), e);
+		} catch (Throwable th) {
+			th.printStackTrace(new PrintStream(resp.getOutputStream()));
+		}
+
+	}
+
+	public void doGet2(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+		try {
+			String number = req.getParameter("number");
+
+			ProductDao productDao = new SQLProductDao();
+
+			Gson gson = new GsonBuilder().create();
+
+			InputStream productsStream = getServletContext()
+					.getResourceAsStream("/WEB-INF/json/xaa" + number + ".json");
 
 			JsonReader jsonReader = new JsonReader(new InputStreamReader(productsStream));
 

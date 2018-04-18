@@ -3,6 +3,10 @@ package products;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLProductDao implements ProductDao {
 	Connection conn = null;
@@ -33,6 +37,35 @@ public class SQLProductDao implements ProductDao {
 			e.printStackTrace(System.out);
 		}
 		return 0;
+	}
+	
+	public List listProductByName(String name) {
+		ArrayList<Product> productList = new ArrayList();
+
+		try {
+			PreparedStatement productQuery = conn.prepareStatement("select * from Product where name like '%" + name + "' limit 5;");
+			
+			ResultSet rs = productQuery.executeQuery();
+			
+			
+			while(rs.next()) {
+				Product product = new Product();
+				product.setSku(rs.getString("sku"));
+				product.setName(rs.getString("name"));
+				product.setType(rs.getString("type"));
+				//product.setPrice(rs.getString("sku"));
+				product.setImage(rs.getString("image"));
+				product.setUrl(rs.getString("url"));
+				
+				productList.add(product);
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(System.out);
+		}
+		
+		return productList;
 	}
 
 }
