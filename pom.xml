@@ -64,6 +64,18 @@
 			<artifactId>appengine-gcs-client</artifactId>
 			<version>0.2</version>
 		</dependency>
+		<dependency> <!-- Only used locally -->
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.42</version>  <!-- v5.x.x is for production, v6.x.x EAP X DevAPI -->
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud.sql</groupId>
+			<!-- If using MySQL 6.x driver, use mysql-socket-factory-connector-j-6 
+				instead -->
+			<artifactId>mysql-socket-factory</artifactId>
+			<version>1.0.5</version>
+		</dependency>
 
 		<!-- Test Dependencies -->
 		<dependency>
