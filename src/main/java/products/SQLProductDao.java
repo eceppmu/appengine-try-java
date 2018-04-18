@@ -14,7 +14,7 @@ public class SQLProductDao implements ProductDao {
 
 	public SQLProductDao() {
 		try {
-			conn = DriverManager.getConnection("jdbc:google:mysql://ppmutestapp:us-central1:products");
+			conn = DriverManager.getConnection("jdbc:google:mysql://ppmutestapp:us-central1:products/productdata?user=root&password=root");
 		} catch (Throwable th) {
 			th.printStackTrace(System.out);
 		}
