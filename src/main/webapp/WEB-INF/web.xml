@@ -12,6 +12,10 @@
         <servlet-name>init</servlet-name>
         <servlet-class>myapp.InitServlet</servlet-class>
     </servlet>
+        <servlet>
+        <servlet-name>initSQL</servlet-name>
+        <servlet-class>myapp.InitServletSQL</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>demo</servlet-name>
         <url-pattern>/demo</url-pattern>
@@ -19,6 +23,10 @@
     <servlet-mapping>
         <servlet-name>init</servlet-name>
         <url-pattern>/init</url-pattern>
+    </servlet-mapping>
+       <servlet-mapping>
+        <servlet-name>initSQL</servlet-name>
+        <url-pattern>/initSQL</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
