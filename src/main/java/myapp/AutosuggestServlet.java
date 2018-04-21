@@ -18,7 +18,7 @@ public class AutosuggestServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		SQLProductDao productDao = new SQLProductDao();
 		
-		List productList = productDao.listProductByName("a");
+		List productList = productDao.listProductByName(req.getParameter("startsWith"));
 		
 		for(int i = 0; i < productList.size(); i++) {
 			try {

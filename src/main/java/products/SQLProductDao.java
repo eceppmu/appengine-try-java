@@ -8,22 +8,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import utils.DbConnectionPool;
+
 public class SQLProductDao implements ProductDao {
 	Connection conn = null;
 	final String createProductSql = "INSERT INTO Product (sku, name, type, price, image, url) VALUES (?,?,?,?,?,?);";
 
-	public SQLProductDao() {
-		try {
-			conn = DriverManager.getConnection("jdbc:google:mysql://ppmutestapp:us-central1:products/productdata?user=root&password=root");
-		} catch (Throwable th) {
-			th.printStackTrace(System.out);
-		}
-	}
-
 	@Override
 	public long createProduct(Product product) {
 		try {
-			PreparedStatement statementCreateProduct = conn.prepareStatement(createProductSql);
+			
+			PreparedStatement statementCreateProduct = DbConnectionPool.getConnection().prepareStatement(createProductSql);
 			statementCreateProduct.setString(0, product.getSku());
 			statementCreateProduct.setString(1, product.getName());
 			statementCreateProduct.setString(2, product.getType());
@@ -43,7 +38,7 @@ public class SQLProductDao implements ProductDao {
 		ArrayList<Product> productList = new ArrayList();
 
 		try {
-			PreparedStatement productQuery = conn.prepareStatement("select * from Product where name like '%" + name + "' limit 5;");
+			PreparedStatement productQuery = DbConnectionPool.getConnection().prepareStatement("select * from Product where name like '" + name + "%' limit 5;");
 			
 			ResultSet rs = productQuery.executeQuery();
 			
@@ -53,7 +48,7 @@ public class SQLProductDao implements ProductDao {
 				product.setSku(rs.getString("sku"));
 				product.setName(rs.getString("name"));
 				product.setType(rs.getString("type"));
-				//product.setPrice(rs.getString("sku"));
+				//product.setPrice(rs.getString("price"));
 				product.setImage(rs.getString("image"));
 				product.setUrl(rs.getString("url"));
 				
