@@ -38,7 +38,7 @@ public class SQLProductDao implements ProductDao {
 		ArrayList<Product> productList = new ArrayList();
 
 		try {
-			PreparedStatement productQuery = DbConnectionPool.getConnection().prepareStatement("select * from Product where name like '" + name + "%' limit 5;");
+			PreparedStatement productQuery = DbConnectionPool.getConnection().prepareStatement("select * from Product where name like '" + name + "%' order by name limit 10;");
 			
 			ResultSet rs = productQuery.executeQuery();
 			
