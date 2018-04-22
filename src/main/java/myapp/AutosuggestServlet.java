@@ -16,16 +16,30 @@ import products.SQLProductDao;
  */
 public class AutosuggestServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) {
+		resp.addHeader("Access-Control-Allow-Origin", "*");
+		resp.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, HEAD");
+
 		SQLProductDao productDao = new SQLProductDao();
 		
-		List productList = productDao.listProductByName(req.getParameter("startsWith"));
+		List<Product> productList = productDao.listProductByName(req.getParameter("startsWith"));
+		
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("[");
+		
 		
 		for(int i = 0; i < productList.size(); i++) {
-			try {
-				resp.getOutputStream().println(((Product)productList.get(i)).getName() + "<br>");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Product product = productList.get(i);
+			sb.append("{\"sku\":" + product.getSku() + ",\"name\"" + product.getName() + "},");
 		}
+		
+		sb.append("]");
+		try {
+			resp.getOutputStream().println(sb.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
