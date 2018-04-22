@@ -30,7 +30,7 @@ public class AutosuggestServlet extends HttpServlet {
 		
 		for(int i = 0; i < productList.size(); i++) {
 			Product product = productList.get(i);
-			sb.append("{\"sku\":" + product.getSku() + ",\"name\"" + product.getName() + "},");
+			sb.append("{\"sku\":" + product.getSku() + ",\"name\":\"" + product.getName() + "\"},");
 		}
 		
 		sb.append("]");
