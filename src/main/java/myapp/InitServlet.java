@@ -30,7 +30,7 @@ public class InitServlet extends HttpServlet {
 	    // clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(new FileInputStream(new File("WEB-INF/client_secrets.json"))));
 	    
 	    try {
-	    	ProductDao productDao = new DatastoreProductDao();
+	    	DatastoreProductDao productDao = new DatastoreProductDao();
 	    		    	
 	    	//InputStream productsStream = getServletContext().getResourceAsStream("/WEB-INF/products.json.zip");
 	    	//InputStream productStream = new URL("https://storage.googleapis.com/ppmutestapp.appspot.com/products.json").openStream();
