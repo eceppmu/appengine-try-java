@@ -11,7 +11,7 @@ import java.util.List;
 import utils.DbConnectionPool;
 
 public class SQLProductDao implements ProductDao {
-	Connection conn = null;
+	//Connection conn = null;
 	final String createProductSql = "INSERT INTO Product (sku, name, type, price, image, url) VALUES (?,?,?,?,?,?);";
 
 	@Override

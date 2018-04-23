@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import products.Product;
 import products.SQLProductDao;
+import utils.MemcacheUtils;
 
 /**
  * Servlet implementation class AutosuggestServlet
@@ -19,28 +20,38 @@ public class AutosuggestServlet extends HttpServlet {
 		resp.addHeader("Access-Control-Allow-Origin", "*");
 		resp.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS, HEAD");
 
-		SQLProductDao productDao = new SQLProductDao();
+		String key = req.getParameter("startsWith");
 		
-		List<Product> productList = productDao.listProductByName(req.getParameter("startsWith"));
+		String value = MemcacheUtils.getCacheKey(key);
 		
-		StringBuffer sb = new StringBuffer();
+		if(value == null) {
 		
-		sb.append("[");
+			SQLProductDao productDao = new SQLProductDao();
 		
+			List<Product> productList = productDao.listProductByName(key);
 		
-		for(int i = 0; i < productList.size(); i++) {
-			Product product = productList.get(i);
-			//sb.append("{\"sku\":\"" + product.getSku() + "\",\"name\":\"" + product.getName() + "\"}");
-			sb.append("{\"name\":\"" + product.getName() + "\"}");
-
-			if(i < productList.size() -1 ) {
-				sb.append(",");
+			StringBuffer sb = new StringBuffer();
+		
+			sb.append("[");
+			
+			
+			for(int i = 0; i < productList.size(); i++) {
+				Product product = productList.get(i);
+				//sb.append("{\"sku\":\"" + product.getSku() + "\",\"name\":\"" + product.getName() + "\"}");
+				sb.append("{\"name\":\"" + product.getName() + "\"}");
+	
+				if(i < productList.size() -1 ) {
+					sb.append(",");
+				}
 			}
+			
+			sb.append("]");
+			value = sb.toString();
+			
+			MemcacheUtils.addCacheKey(key, value);
 		}
-		
-		sb.append("]");
 		try {
-			resp.getOutputStream().println(sb.toString());
+			resp.getOutputStream().println(value);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

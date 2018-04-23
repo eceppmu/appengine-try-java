@@ -5,7 +5,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 
-public class DatastoreProductDao implements ProductDao {
+public class DatastoreProductDao {
 	  private static DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); // A;uthorized Datastore service
 	  private static String ENTITY_NAME = "Product";
 	  private static String FIELD_SKU = "sku";
@@ -18,7 +18,6 @@ public class DatastoreProductDao implements ProductDao {
 		  datastore = DatastoreServiceFactory.getDatastoreService();
 	  }
 
-	  @Override
 	  public long createProduct(Product product) {
 	    Entity productEntity = new Entity(ENTITY_NAME);  // Key will be assigned once written
 	    productEntity.setProperty(FIELD_SKU, product.getSku());
